@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🖥️ Uptime Terminal v1.0</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- CRT Effect Overlay -->
+    <div class="crt-overlay"></div>
+    
+    <div class="container">
+        <header class="terminal-header">
+            <div class="glitch-text" data-text="SYSTEM STATUS MONITOR">SYSTEM STATUS MONITOR</div>
+            <div class="led-indicator" id="connection-status"></div>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="status-summary neon-box">
+                <h2>📊 System Metrics</h2>
+                <div class="metric">
+                    <span class="label">Online Nodes:</span>
+                    <span class="value" id="online-count">0</span>
+                </div>
+                <div class="metric">
+                    <span class="label">Avg. Response:</span>
+                    <span class="value" id="avg-response">0ms</span>
+                </div>
+            </div>
+
+            <div class="log-table neon-box">
+                <div class="table-header">
+                    <h2>🔄 Recent Activity</h2>
+                    <div class="refresh-button" onclick="location.reload()">⟳ Refresh</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>Status</th>
+                            <th>Response</th>
+                            <th>Last Check</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr class="status-{{ log[5] }}">
+                            <td class="url-cell">{{ log[1] }}</td>
+                            <td>
+                                <div class="status-indicator {{ log[5] }}">
+                                    {{ log[5].upper() }}
+                                </div>
+                            </td>
+                            <td>{{ log[3]|round(2) }}ms</td>
+                            <td>{{ log[4][11:19] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer class="terminal-footer">
+            <div class="scanline"></div>
+            <div class="system-info">
+                <span>🕹️ Uptime Terminal v1.0</span>
+                <span>📅 {{ date }}</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
