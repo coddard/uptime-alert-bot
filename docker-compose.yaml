@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  uptime-checker:
+    build: .
+    env_file: .env
+    volumes:
+      - ./config:/app/config
+      - ./uptime.db:/app/uptime.db
+    ports:
+      - "8000:8000"
+    depends_on:
+      - prometheus
+
+  web-dashboard:
+    build: .
+    command: gunicorn --bind 0.0.0.0:5000 --workers 2 web.app:app
+    env_file: .env
+    volumes:
+      - ./web:/app/web
+      - ./uptime.db:/app/uptime.db
+    ports:
+      - "5000:5000"
+      - "8001:8000"
+    depends_on:
+      - uptime-checker
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
