@@ -1,0 +1,4 @@
+- url: "https://google.com"
+  check_interval: 300
+- url: "https://github.com"
+  check_interval: 600
